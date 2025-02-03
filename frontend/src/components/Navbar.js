@@ -4,41 +4,28 @@ import { useAuth } from '../context/AuthContext';
 import '../styles/Navbar.css';
 
 const Navbar = () => {
-  const { currentUser } = useAuth();
+  const { currentUser, logout } = useAuth();
   const [isVisible, setIsVisible] = useState(true);
   const [isScrolled, setIsScrolled] = useState(false);
   const [lastScrollY, setLastScrollY] = useState(0);
 
   useEffect(() => {
     const handleScroll = () => {
-      // Show/hide navbar on scroll direction
       if (window.scrollY > lastScrollY) {
-        setIsVisible(false); // Hide on scroll down
+        setIsVisible(false);
       } else {
-        setIsVisible(true); // Show on scroll up
+        setIsVisible(true);
       }
       setLastScrollY(window.scrollY);
-
-      // Add "scrolled" class after passing a certain threshold
-      if (window.scrollY > 50) {
-        setIsScrolled(true);
-      } else {
-        setIsScrolled(false);
-      }
+      setIsScrolled(window.scrollY > 50);
     };
 
     window.addEventListener('scroll', handleScroll);
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
+    return () => window.removeEventListener('scroll', handleScroll);
   }, [lastScrollY]);
 
   return (
-    <nav
-      className={`navbar ${isVisible ? 'visible' : 'hidden'} ${
-        isScrolled ? 'scrolled' : ''
-      }`}
-    >
+    <nav className={`navbar ${isVisible ? 'visible' : 'hidden'} ${isScrolled ? 'scrolled' : ''}`}>
       <ul className="navbar-menu">
         <li><Link to="/">Home</Link></li>
         {currentUser ? (
@@ -46,7 +33,7 @@ const Navbar = () => {
             <li><Link to={`/user/${currentUser.username}`}>Profile</Link></li>
             <li><Link to="/dashboard">Dashboard</Link></li>
             <li><Link to="/create-article">Create Article</Link></li>
-            <li><Link to="/logout">Logout</Link></li>
+            <li><button onClick={logout} className="logout-btn">Logout</button></li>
           </>
         ) : (
           <>

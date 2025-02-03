@@ -39,7 +39,7 @@ app.use('/user/follow',followRoutes);
 
 // Dynamic Routes for other functionalities
 app.use('/api', articleRoutes);
-app.use('/api/:username/comments', commentRoutes);
+app.use('/api/comments', commentRoutes);
 app.use('/api/likes', likeRoutes);
 app.use('/api/:username/saved-posts', savedPostRoutes);
 
